@@ -1,4 +1,5 @@
 const state = { portfolios: [], holdings: [], dividends: [], portfolioId: "" };
+const NOTIFICATION_SETTINGS_KEY = "divtrack-notifications";
 const $ = (selector) => document.querySelector(selector);
 
 const money = (value, currency = "BRL") => new Intl.NumberFormat("pt-BR", {
@@ -37,6 +38,7 @@ async function loadData() {
       api("/portfolios"), api(`/holdings${selectedQuery()}`), api(`/dividends${selectedQuery()}`)
     ]);
     render();
+    checkPaymentNotifications();
   } catch (error) { toast(error.message, true); }
 }
 
@@ -46,6 +48,33 @@ function render() {
   renderChart();
   renderUpcoming();
   renderHoldings();
+  renderNotificationState();
+}
+
+function notificationSettings() {
+  try { return JSON.parse(localStorage.getItem(NOTIFICATION_SETTINGS_KEY)) || { enabled: false }; }
+  catch { return { enabled: false }; }
+}
+
+function renderNotificationState() {
+  const enabled = notificationSettings().enabled && "Notification" in window && Notification.permission === "granted";
+  $("#notificationButton").classList.toggle("alert-on", enabled);
+  $("#notificationButton").setAttribute("aria-label", enabled ? "Notificações ativadas" : "Configurar notificações");
+}
+
+function checkPaymentNotifications() {
+  if (!notificationSettings().enabled || !("Notification" in window) || Notification.permission !== "granted") return;
+  const today = new Date().toISOString().slice(0, 10);
+  state.dividends.filter(item => item.payment_date === today).forEach(item => {
+    const key = `divtrack-notified-${item.id}-${item.payment_date}`;
+    if (localStorage.getItem(key)) return;
+    new Notification(`${item.ticker}: pagamento hoje`, {
+      body: `${money(item.total_amount, item.currency)} em ${item.event_type.toLowerCase()} agendado para hoje.`,
+      icon: "/static/assets/favicon.svg",
+      tag: key
+    });
+    localStorage.setItem(key, new Date().toISOString());
+  });
 }
 
 function renderPortfolioOptions() {
@@ -169,6 +198,37 @@ $("#portfolioForm").addEventListener("submit", async event => {
     event.currentTarget.reset(); $("#portfolioDialog").close(); await loadData();
     $("#assetPortfolio").value = portfolio.id; toast("Carteira criada.");
   } catch (error) { toast(error.message, true); }
+});
+
+$("#notificationButton").addEventListener("click", () => {
+  $("#notificationEnabled").checked = notificationSettings().enabled;
+  $("#notificationDialog").showModal();
+});
+
+$("#notificationForm").addEventListener("submit", async event => {
+  event.preventDefault();
+  let enabled = $("#notificationEnabled").checked;
+  if (enabled) {
+    if (!("Notification" in window)) {
+      toast("Este navegador não oferece notificações.", true);
+      return;
+    }
+    const permission = await Notification.requestPermission();
+    if (permission !== "granted") {
+      enabled = false;
+      $("#notificationEnabled").checked = false;
+      toast("Permissão de notificações não concedida.", true);
+    }
+  }
+  localStorage.setItem(NOTIFICATION_SETTINGS_KEY, JSON.stringify({ enabled }));
+  $("#notificationDialog").close();
+  renderNotificationState();
+  if (enabled) {
+    checkPaymentNotifications();
+    toast("Notificações ativadas.");
+  } else {
+    toast("Notificações desativadas.");
+  }
 });
 
 $("#portfolioFilter").addEventListener("change", async event => { state.portfolioId = event.target.value; await loadData(); });

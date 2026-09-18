@@ -56,6 +56,7 @@ svg { width: 21px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-l
 .brand-mark { margin-bottom: 32px; color: #08130f; background: var(--accent); box-shadow: 0 0 28px rgba(137, 227, 198, .2); }
 .sidebar nav { display: grid; gap: 11px; }
 .nav-item:hover, .nav-item.active { color: var(--text); background: rgba(255,255,255,.08); }
+.nav-item.alert-on { color: var(--accent); background: rgba(137,227,198,.09); }
 .sidebar > button { margin-top: auto; }
 
 main { grid-column: 2; width: min(1440px, calc(100vw - 108px)); margin: 0 auto; padding: 22px 24px 28px; }
@@ -141,6 +142,15 @@ input:focus, select:focus, textarea:focus { border-color: rgba(137,227,198,.55);
 textarea { resize: vertical; }
 .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 11px; }
 .form-hint { margin: -2px 0 15px; color: var(--muted); font-size: .72rem; line-height: 1.5; }
+.notification-hint { margin: 16px 0; }
+.toggle-row { grid-template-columns: 1fr auto; align-items: center; gap: 24px; padding: 15px; border: 1px solid var(--border); border-radius: 13px; background: rgba(255,255,255,.035); }
+.toggle-row span { display: grid; gap: 5px; }
+.toggle-row strong { color: var(--text); font-size: .86rem; }
+.toggle-row small { color: var(--muted); font-size: .72rem; font-weight: 450; }
+.toggle-row input { appearance: none; width: 44px; height: 24px; padding: 2px; border: 0; border-radius: 999px; background: rgba(255,255,255,.14); transition: .2s ease; }
+.toggle-row input::before { content: ""; display: block; width: 20px; height: 20px; border-radius: 50%; background: #cbd3de; transition: transform .2s ease; }
+.toggle-row input:checked { background: var(--accent); }
+.toggle-row input:checked::before { transform: translateX(20px); background: #07120e; }
 .toast { position: fixed; right: 24px; bottom: 24px; z-index: 50; max-width: min(380px, calc(100vw - 48px)); padding: 13px 16px; border: 1px solid var(--border); border-radius: 12px; color: var(--text); background: var(--panel-strong); box-shadow: var(--shadow); transform: translateY(20px); opacity: 0; pointer-events: none; transition: .25s ease; }
 .toast.show { transform: none; opacity: 1; }
 .toast.error { border-color: rgba(255,143,157,.35); }

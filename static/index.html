@@ -19,6 +19,7 @@
         <a class="nav-item active" href="#top" aria-label="Visão geral"><svg viewBox="0 0 24 24"><path d="M3 11 12 4l9 7v9H3Z"/><path d="M9 20v-6h6v6"/></svg></a>
         <a class="nav-item" href="#income" aria-label="Rendimentos"><svg viewBox="0 0 24 24"><path d="M4 19V9M10 19V5M16 19v-7M22 19H2"/></svg></a>
         <a class="nav-item" href="#holdings" aria-label="Carteira"><svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="14" rx="3"/><path d="M8 6V4h8v2M3 11h18"/></svg></a>
+        <button class="nav-item" id="notificationButton" type="button" aria-label="Configurar notificações"><svg viewBox="0 0 24 24"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4"/></svg></button>
         <a class="nav-item" href="/docs" aria-label="Documentação da API"><svg viewBox="0 0 24 24"><path d="M6 3h9l3 3v15H6Z"/><path d="M9 11h6M9 15h6M14 3v4h4"/></svg></a>
       </nav>
       <button class="nav-item" id="themeToggle" type="button" aria-label="Alternar luminosidade"><svg viewBox="0 0 24 24"><path d="M12 3a9 9 0 1 0 9 9 7 7 0 0 1-9-9Z"/></svg></button>
@@ -135,6 +136,18 @@
       <label>Nome<input name="name" placeholder="Longo prazo" maxlength="80" required></label>
       <label>Descrição<textarea name="description" placeholder="Objetivo desta carteira" maxlength="300" rows="3"></textarea></label>
       <button class="button primary full" type="submit">Criar carteira</button>
+    </form>
+  </dialog>
+
+  <dialog id="notificationDialog">
+    <form id="notificationForm" method="dialog">
+      <div class="dialog-head"><div><p>ALERTAS</p><h3>Notificações de pagamento</h3></div><button class="icon-button close-dialog" type="button" aria-label="Fechar">×</button></div>
+      <label class="toggle-row">
+        <span><strong>Avisar no dia do pagamento</strong><small>Receba alerta para cada provento agendado.</small></span>
+        <input id="notificationEnabled" type="checkbox" role="switch">
+      </label>
+      <p class="form-hint notification-hint">O navegador pedirá permissão. Alertas aparecem enquanto DivTrack estiver aberto.</p>
+      <button class="button primary full" type="submit">Salvar preferência</button>
     </form>
   </dialog>
 

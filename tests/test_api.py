@@ -30,7 +30,9 @@ def sample_dividend(**overrides):
 
 def test_health(client: TestClient):
     assert client.get("/health").json() == {"status": "ok"}
-    assert "DivTrack" in client.get("/").text
+    dashboard = client.get("/").text
+    assert "DivTrack" in dashboard
+    assert "Notificações de pagamento" in dashboard
 
 
 def test_dividend_crud(client: TestClient):
