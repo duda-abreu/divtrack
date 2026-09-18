@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#080d17">
+  <meta name="description" content="Painel pessoal para acompanhar ações e dividendos.">
+  <title>DivTrack</title>
+  <link rel="icon" href="/static/assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+  <div class="page-shell">
+    <aside class="sidebar" aria-label="Navegação principal">
+      <a class="brand-mark" href="#top" aria-label="DivTrack">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 16.5 9 11l3 3 7-8"/><path d="M15 6h4v4"/></svg>
+      </a>
+      <nav>
+        <a class="nav-item active" href="#top" aria-label="Visão geral"><svg viewBox="0 0 24 24"><path d="M3 11 12 4l9 7v9H3Z"/><path d="M9 20v-6h6v6"/></svg></a>
+        <a class="nav-item" href="#income" aria-label="Rendimentos"><svg viewBox="0 0 24 24"><path d="M4 19V9M10 19V5M16 19v-7M22 19H2"/></svg></a>
+        <a class="nav-item" href="#holdings" aria-label="Carteira"><svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="14" rx="3"/><path d="M8 6V4h8v2M3 11h18"/></svg></a>
+        <a class="nav-item" href="/docs" aria-label="Documentação da API"><svg viewBox="0 0 24 24"><path d="M6 3h9l3 3v15H6Z"/><path d="M9 11h6M9 15h6M14 3v4h4"/></svg></a>
+      </nav>
+      <button class="nav-item" id="themeToggle" type="button" aria-label="Alternar luminosidade"><svg viewBox="0 0 24 24"><path d="M12 3a9 9 0 1 0 9 9 7 7 0 0 1-9-9Z"/></svg></button>
+    </aside>
+
+    <main id="top">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">PAINEL DE RENDA</p>
+          <h1>DivTrack</h1>
+        </div>
+        <div class="top-actions">
+          <label class="portfolio-filter">
+            <span>Carteira</span>
+            <select id="portfolioFilter" aria-label="Filtrar carteira"><option value="">Todas</option></select>
+          </label>
+          <button class="button ghost" id="syncButton" type="button">
+            <svg viewBox="0 0 24 24"><path d="M20 7h-5V2M4 17h5v5"/><path d="M5.1 9a8 8 0 0 1 13.2-3L20 7M4 17l1.7 1a8 8 0 0 0 13.2-3"/></svg>
+            Sincronizar
+          </button>
+          <button class="button primary" id="addAssetButton" type="button"><span>＋</span> Adicionar ação</button>
+        </div>
+      </header>
+
+      <section class="welcome" aria-labelledby="welcomeTitle">
+        <div>
+          <p id="todayLabel">SEU PATRIMÔNIO • HOJE</p>
+          <h2 id="welcomeTitle">Boa noite, Maria.</h2>
+        </div>
+        <div class="live-pill"><i></i><span id="syncStatus">Dados locais atualizados</span></div>
+      </section>
+
+      <section class="metrics" aria-label="Resumo financeiro">
+        <article class="metric-card featured">
+          <div class="metric-icon">↗</div>
+          <p>Dividendos acumulados</p>
+          <strong id="totalIncome">R$ 0,00</strong>
+          <small id="incomeRecords">Nenhum pagamento registrado</small>
+        </article>
+        <article class="metric-card">
+          <div class="metric-icon violet">◈</div>
+          <p>Próximo pagamento</p>
+          <strong id="nextPayment">—</strong>
+          <small id="nextPaymentMeta">Aguardando anúncios</small>
+        </article>
+        <article class="metric-card">
+          <div class="metric-icon blue">▦</div>
+          <p>Ações na carteira</p>
+          <strong id="holdingCount">0</strong>
+          <small id="portfolioCount">0 carteiras</small>
+        </article>
+        <article class="metric-card compact-action">
+          <p>Organize por objetivo</p>
+          <strong>Crie carteiras</strong>
+          <button id="addPortfolioButton" type="button">Nova carteira <span>→</span></button>
+        </article>
+      </section>
+
+      <section class="dashboard-grid" id="income">
+        <article class="glass-card income-card">
+          <div class="card-heading">
+            <div><p>FLUXO DE RENDA</p><h3>Dividendos por mês</h3></div>
+            <span class="badge">Últimos 6 meses</span>
+          </div>
+          <div class="chart" id="incomeChart" aria-label="Gráfico mensal de dividendos"></div>
+        </article>
+
+        <article class="glass-card upcoming-card">
+          <div class="card-heading">
+            <div><p>AGENDA</p><h3>Próximos pagamentos</h3></div>
+            <span class="count-badge" id="upcomingCount">0</span>
+          </div>
+          <div class="event-list" id="upcomingList">
+            <div class="empty-state">Sincronize seus ativos para montar a agenda.</div>
+          </div>
+        </article>
+      </section>
+
+      <section class="glass-card holdings-card" id="holdings">
+        <div class="card-heading">
+          <div><p>POSIÇÕES</p><h3>Minha carteira</h3></div>
+          <button class="text-button" id="inlineAddAsset" type="button">＋ Adicionar ação</button>
+        </div>
+        <div class="holdings-grid" id="holdingsList">
+          <div class="empty-state wide">Cadastre sua primeira ação para acompanhar proventos automaticamente.</div>
+        </div>
+      </section>
+
+      <footer>
+        <span>DivTrack</span>
+        <span>Dados de mercado via brapi.dev • Não constitui recomendação de investimento.</span>
+      </footer>
+    </main>
+  </div>
+
+  <dialog id="assetDialog">
+    <form id="assetForm" method="dialog">
+      <div class="dialog-head"><div><p>NOVA POSIÇÃO</p><h3>Adicionar ação</h3></div><button class="icon-button close-dialog" type="button" aria-label="Fechar">×</button></div>
+      <label>Ticker<input name="ticker" placeholder="PETR4" maxlength="15" required autocomplete="off"></label>
+      <div class="form-row">
+        <label>Quantidade<input name="shares" type="number" min="0.00000001" step="any" placeholder="100" required></label>
+        <label>Preço médio<input name="average_price" type="number" min="0" step="any" placeholder="38,50"></label>
+      </div>
+      <label>Carteira<select name="portfolio_id" id="assetPortfolio" required></select></label>
+      <label>Data de aquisição<input name="acquired_on" type="date"></label>
+      <p class="form-hint">A data ajuda a importar somente proventos aos quais você teria direito.</p>
+      <button class="button primary full" type="submit">Salvar posição</button>
+    </form>
+  </dialog>
+
+  <dialog id="portfolioDialog">
+    <form id="portfolioForm" method="dialog">
+      <div class="dialog-head"><div><p>NOVA CARTEIRA</p><h3>Criar carteira</h3></div><button class="icon-button close-dialog" type="button" aria-label="Fechar">×</button></div>
+      <label>Nome<input name="name" placeholder="Longo prazo" maxlength="80" required></label>
+      <label>Descrição<textarea name="description" placeholder="Objetivo desta carteira" maxlength="300" rows="3"></textarea></label>
+      <button class="button primary full" type="submit">Criar carteira</button>
+    </form>
+  </dialog>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="/static/app.js" defer></script>
+</body>
+</html>
